@@ -5,7 +5,7 @@ CFLAGS = -Wall -Wextra -Werror -pthread
 OBJ_DIR = obj
 INC_DIR = inc
 
-SRC = src/main.c src/parse.c
+SRC = src/main.c src/parse.c src/context.c src/time_utils.c src/dongle.c src/p_queue.c
 OBJ = $(SRC:src/%.c=$(OBJ_DIR)/%.o)
 
 CFLAGS += -I $(INC_DIR)
@@ -17,7 +17,7 @@ DEBUG     ?= 4
 REFACTOR  ?= 5
 DONGLE    ?= 228
 COMPILES  ?= 9
-SCHEDULER ?= FIFO
+SCHEDULER ?= fifo
 
 all: $(NAME)
 
