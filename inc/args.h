@@ -6,13 +6,14 @@
 /*   By: vborysov <vborysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 21:07:05 by vborysov          #+#    #+#             */
-/*   Updated: 2026/04/25 00:55:19 by vborysov         ###   ########.fr       */
+/*   Updated: 2026/05/09 16:48:42 by vborysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ARGS_H
 # define ARGS_H
 # include <stdbool.h>
+# include <stdlib.h>
 
 typedef struct s_args
 {
@@ -26,6 +27,6 @@ typedef struct s_args
 	char	*scheduler; // --scheduler
 }				t_args;
 
-bool	fn_parse_args(int argc, char	**argv, t_args	*args);
+bool	ft_parse_args(int argc, char	**argv, t_args	*args);
 
 #endif

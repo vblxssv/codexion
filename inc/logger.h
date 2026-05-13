@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time_utils.c                                       :+:      :+:    :+:   */
+/*   logger.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vborysov <vborysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/11 21:25:09 by vborysov          #+#    #+#             */
-/*   Updated: 2026/05/11 21:25:24 by vborysov         ###   ########.fr       */
+/*   Created: 2026/05/11 21:45:29 by vborysov          #+#    #+#             */
+/*   Updated: 2026/05/11 22:09:51 by vborysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "time_utils.h"
-#include <sys/time.h>
+#ifndef LOGGER_H
+# define LOGGER_H
+# include <stdio.h>
+# include "time_utils.h"
+# include "coder.h"
 
-long long	ft_get_current_time(void)
-{
-	struct timeval	tv;
+typedef struct s_coder	t_coder;
 
-	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-}
+void	ft_log(t_coder	*coder, char	*msg);
 
-long long	ft_get_relative_time(long long start_time)
-{
-	return (ft_get_current_time() - start_time);
-}
+#endif

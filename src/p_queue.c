@@ -6,13 +6,13 @@
 /*   By: vborysov <vborysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 14:57:20 by vborysov          #+#    #+#             */
-/*   Updated: 2026/05/08 15:30:40 by vborysov         ###   ########.fr       */
+/*   Updated: 2026/05/11 21:35:32 by vborysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "p_queue.h"
 
-t_queue	*ft_create_queue(unsigned int	capacity, t_sched_mode mode)
+t_queue	*ft_create_queue(unsigned int capacity, t_sched_mode mode)
 {
 	t_queue	*q;
 
@@ -41,7 +41,7 @@ void	ft_delete_queue(t_queue	*q)
 		free(q->heap);
 	free(q);
 }
-// вернет тру если б пижже чем а, в зависимости от мода кнш
+
 static bool	ft_is_higher(t_request a, t_request b, t_sched_mode mode)
 {
 	if (mode == MODE_EDF)
@@ -69,7 +69,7 @@ static void	ft_shift_up(t_queue	*q, int i)
 			i = parent;
 		}
 		else
-			break;
+			break ;
 	}
 }
 
@@ -88,14 +88,15 @@ static void	ft_shift_down(t_queue *q, unsigned int i)
 	unsigned int	left;
 	unsigned int	right;
 	unsigned int	best;
-	t_request	tmp;
+	t_request		tmp;
 
 	while (1)
 	{
 		left = 2 * i + 1;
 		right = 2 * i + 2;
 		best = i;
-		if (left < q->size && ft_is_higher(q->heap[left], q->heap[best], q->mode))
+		if (left < q->size
+			&& ft_is_higher(q->heap[left], q->heap[best], q->mode))
 			best = left;
 		if (right < q->size && ft_is_higher(q->heap[right], q->heap[best], q->mode))
 			best = right;
@@ -107,16 +108,16 @@ static void	ft_shift_down(t_queue *q, unsigned int i)
 			i = best;
 		}
 		else
-			break;
+			break ;
 	}
 }
 
-t_request ft_pop(t_queue *q)
+t_request	ft_pop(t_queue	*q)
 {
-	t_request root;
+	t_request	root;
 
 	if (q->size == 0)
-		return (t_request){0, 0, 0};
+		return ((t_request){0, 0, 0});
 	root = q->heap[0];
 	q->size--;
 	if (q->size > 0)
@@ -125,4 +126,11 @@ t_request ft_pop(t_queue *q)
 		ft_shift_down(q, 0);
 	}
 	return (root);
+}
+
+t_request	ft_peek(t_queue *q)
+{
+	if (q && q->size > 0)
+		return (q->heap[0]);
+	return ((t_request){0});
 }

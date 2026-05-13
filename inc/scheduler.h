@@ -1,27 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time_utils.c                                       :+:      :+:    :+:   */
+/*   scheduler.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vborysov <vborysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/11 21:25:09 by vborysov          #+#    #+#             */
-/*   Updated: 2026/05/11 21:25:24 by vborysov         ###   ########.fr       */
+/*   Created: 2026/05/08 16:53:07 by vborysov          #+#    #+#             */
+/*   Updated: 2026/05/09 20:48:17 by vborysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "time_utils.h"
-#include <sys/time.h>
+#ifndef SCHEDULER_H
+# define SCHEDULER_H
+# include <pthread.h>
+# include "context.h"
+# include <stdio.h>
 
-long long	ft_get_current_time(void)
-{
-	struct timeval	tv;
+void	*ft_scheduler_routine(void	*args);
 
-	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-}
-
-long long	ft_get_relative_time(long long start_time)
-{
-	return (ft_get_current_time() - start_time);
-}
+#endif

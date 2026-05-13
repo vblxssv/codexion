@@ -1,27 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time_utils.c                                       :+:      :+:    :+:   */
+/*   monitor.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vborysov <vborysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/11 21:25:09 by vborysov          #+#    #+#             */
-/*   Updated: 2026/05/11 21:25:24 by vborysov         ###   ########.fr       */
+/*   Created: 2026/05/11 22:02:52 by vborysov          #+#    #+#             */
+/*   Updated: 2026/05/11 22:04:14 by vborysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "time_utils.h"
-#include <sys/time.h>
+#ifndef MONITOR_H
+# define MONITOR_H
+# include "context.h"
 
-long long	ft_get_current_time(void)
-{
-	struct timeval	tv;
+void	*ft_monitor_routine(void	*args);
 
-	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-}
-
-long long	ft_get_relative_time(long long start_time)
-{
-	return (ft_get_current_time() - start_time);
-}
+#endif

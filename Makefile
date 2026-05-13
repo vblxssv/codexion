@@ -5,19 +5,21 @@ CFLAGS = -Wall -Wextra -Werror -pthread
 OBJ_DIR = obj
 INC_DIR = inc
 
-SRC = src/main.c src/parse.c src/context.c src/time_utils.c src/dongle.c src/p_queue.c
+SRC = src/main.c src/parse.c src/context.c src/time_utils.c src/dongle.c \
+ src/p_queue.c src/coder.c src/scheduler.c src/logger.c src/monitor.c
+
 OBJ = $(SRC:src/%.c=$(OBJ_DIR)/%.o)
 
 CFLAGS += -I $(INC_DIR)
 
-CODERS    ?= 1
-BURNOUT   ?= 2
-COMPILE   ?= 3
-DEBUG     ?= 4
-REFACTOR  ?= 5
-DONGLE    ?= 228
+CODERS    ?= 4
+BURNOUT   ?= 1000
+COMPILE   ?= 200
+DEBUG     ?= 100
+REFACTOR  ?= 100
+DONGLE    ?= 500
 COMPILES  ?= 9
-SCHEDULER ?= fifo
+SCHEDULER ?= edf
 
 all: $(NAME)
 

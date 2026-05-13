@@ -6,7 +6,7 @@
 /*   By: vborysov <vborysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 21:31:29 by vborysov          #+#    #+#             */
-/*   Updated: 2026/04/25 00:55:24 by vborysov         ###   ########.fr       */
+/*   Updated: 2026/05/09 16:56:46 by vborysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <string.h>
 #include "args.h"
 
-static void	fn_init_args(t_args	*args)
+static void	ft_init_args(t_args	*args)
 {
 	args->number_of_coders = -1;
 	args->time_to_burnout = -1;
@@ -28,7 +28,7 @@ static void	fn_init_args(t_args	*args)
 	args->scheduler = NULL;
 }
 
-static bool	fn_is_number(const char	*str)
+static bool	ft_is_number(const char	*str)
 {
 	long	result;
 	int		i;
@@ -53,14 +53,14 @@ static bool	fn_is_number(const char	*str)
 	return (true);
 }
 
-static bool	fn_is_scheduler(const char	*str)
+static bool	ft_is_scheduler(const char	*str)
 {
-	return (strcmp(str, "FIFO") == 0 || strcmp(str, "EDF") == 0);
+	return (strcmp(str, "fifo") == 0 || strcmp(str, "edf") == 0);
 }
 
-static bool	fn_fill_numeric(t_args	*args, char	*flag, char	*val)
+static bool	ft_fill_numeric(t_args	*args, char	*flag, char	*val)
 {
-	if (!fn_is_number(val))
+	if (!ft_is_number(val))
 		return (false);
 	if (strcmp(flag, "--coders") == 0)
 		args->number_of_coders = atoi(val);
@@ -81,23 +81,23 @@ static bool	fn_fill_numeric(t_args	*args, char	*flag, char	*val)
 	return (true);
 }
 
-bool	fn_parse_args(int argc, char	**argv, t_args	*args)
+bool	ft_parse_args(int argc, char	**argv, t_args	*args)
 {
 	int	i;
 
 	if (argc != 17)
 		return (false);
-	fn_init_args(args);
+	ft_init_args(args);
 	i = 1;
 	while (i < argc)
 	{
 		if (strcmp(argv[i], "--scheduler") == 0)
 		{
-			if (!fn_is_scheduler(argv[i + 1]))
+			if (!ft_is_scheduler(argv[i + 1]))
 				return (false);
 			args->scheduler = argv[i + 1];
 		}
-		else if (!fn_fill_numeric(args, argv[i], argv[i + 1]))
+		else if (!ft_fill_numeric(args, argv[i], argv[i + 1]))
 			return (false);
 		i += 2;
 	}

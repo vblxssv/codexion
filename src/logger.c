@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time_utils.c                                       :+:      :+:    :+:   */
+/*   logger.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vborysov <vborysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/11 21:25:09 by vborysov          #+#    #+#             */
-/*   Updated: 2026/05/11 21:25:24 by vborysov         ###   ########.fr       */
+/*   Created: 2026/05/11 21:49:29 by vborysov          #+#    #+#             */
+/*   Updated: 2026/05/11 21:52:18 by vborysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "time_utils.h"
-#include <sys/time.h>
+#include "logger.h"
 
-long long	ft_get_current_time(void)
+void	ft_log(t_coder	*coder, char	*msg)
 {
-	struct timeval	tv;
+	long long	now;
 
-	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-}
-
-long long	ft_get_relative_time(long long start_time)
-{
-	return (ft_get_current_time() - start_time);
+	pthread_mutex_lock(&coder->ctx->state_mutex);
+	now = ft_get_relative_time(coder->ctx->start_time);
+	printf("%lld %i %s\n", now, coder->id, msg);
+	pthread_mutex_unlock(&coder->ctx->state_mutex);
 }
