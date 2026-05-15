@@ -6,7 +6,7 @@
 /*   By: vborysov <vborysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 16:51:15 by vborysov          #+#    #+#             */
-/*   Updated: 2026/05/14 18:53:20 by vborysov         ###   ########.fr       */
+/*   Updated: 2026/05/15 14:43:31 by vborysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,6 @@
 # include "time_utils.h"
 # include <unistd.h>
 # include "logger.h"
-
-typedef enum e_state
-{
-	COMPILE,
-	DEBUG,
-	REFACTOR,
-	IDLE
-}	t_state;
 
 typedef struct s_context	t_context;
 
@@ -42,8 +34,6 @@ typedef struct s_coder
 	t_dongle		*right;
 	t_context		*ctx;
 
-	t_state			state;
-
 	pthread_t		thread;
 	pthread_mutex_t	mutex;
 	pthread_cond_t	cond;
@@ -56,5 +46,6 @@ void			*ft_live_life(void *args);
 void			ft_wake_up(t_coder	*coder);
 void			ft_get_in_q(t_coder	*coder);
 unsigned int	ft_get_compiles(t_coder	*coder);
+void			ft_add_compiles(t_coder	*coder);
 
 #endif

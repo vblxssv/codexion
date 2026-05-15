@@ -6,7 +6,7 @@
 /*   By: vborysov <vborysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/09 20:43:31 by vborysov          #+#    #+#             */
-/*   Updated: 2026/05/14 18:44:07 by vborysov         ###   ########.fr       */
+/*   Updated: 2026/05/15 15:38:59 by vborysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,15 @@ static bool	ft_is_ready(t_coder	*coder)
 	return (false);
 }
 
+static void	ft_allow_work(t_coder	*coder)
+{
+	ft_pop(coder->left->queue);
+	ft_pop(coder->right->queue);
+	coder->left->cooldown_until = 2000000000000LL;
+	coder->right->cooldown_until = 2000000000000LL;
+	ft_wake_up(coder);
+}
+
 void	*ft_scheduler_routine(void	*args)
 {
 	t_context	*ctx;
@@ -44,13 +53,7 @@ void	*ft_scheduler_routine(void	*args)
 			coder = &ctx->coders[i];
 			ft_lock_pair(coder->left, coder->right);
 			if (ft_is_ready(coder))
-			{
-				ft_pop(coder->left->queue);
-				ft_pop(coder->right->queue);
-				coder->left->cooldown_until = 2000000000000LL;
-				coder->right->cooldown_until = 2000000000000LL;
-				ft_wake_up(coder);
-			}
+				ft_allow_work(coder);
 			ft_unlock_pair(coder->left, coder->right);
 			++i;
 		}

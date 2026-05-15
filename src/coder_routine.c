@@ -1,69 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   coder.c                                            :+:      :+:    :+:   */
+/*   coder_routine.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vborysov <vborysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/09 16:40:15 by vborysov          #+#    #+#             */
-/*   Updated: 2026/05/15 13:16:11 by vborysov         ###   ########.fr       */
+/*   Updated: 2026/05/15 15:30:53 by vborysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coder.h"
 #include <stdio.h>
-
-t_coder	*ft_init_coders(t_context	*ctx)
-{
-	t_coder	*coders;
-	int		i;
-
-	coders = malloc(sizeof(t_coder) * ctx->args.number_of_coders);
-	if (!coders)
-		return (NULL);
-	i = 0;
-	while (i < ctx->args.number_of_coders)
-	{
-		coders[i].id = i + 1;
-		coders[i].compiles = 0;
-		coders[i].state = IDLE;
-		coders[i].can_work = false;
-		coders[i].ctx = ctx;
-		coders[i].left = &ctx->dongles[i];
-		coders[i].right = &ctx->dongles[(i + 1) % ctx->args.number_of_coders];
-		coders[i].deadline = ctx->args.time_to_burnout;
-		pthread_mutex_init(&coders[i].mutex, NULL);
-		pthread_cond_init(&coders[i].cond, NULL);
-		i++;
-	}
-	return (coders);
-}
-
-void	ft_free_coders(t_coder	*coders)
-{
-	int	i;
-
-	if (!coders)
-		return ;
-	i = 0;
-	while (i < coders->ctx->args.number_of_coders)
-	{
-		pthread_mutex_destroy(&coders[i].mutex);
-		pthread_cond_destroy(&coders[i].cond);
-		++i;
-	}
-	free(coders);
-}
-
-t_request	ft_make_request(t_coder	*coder)
-{
-	t_request	req;
-
-	req.coder_id = coder->id;
-	req.arrival_time = ft_get_relative_time(coder->ctx->start_time);
-	req.deadline = coder->deadline;
-	return (req);
-}
 
 void	ft_get_in_q(t_coder	*coder)
 {
@@ -106,11 +54,22 @@ static void	ft_release_dongles(t_coder	*coder)
 	ft_unlock_pair(coder->left, coder->right);
 }
 
-static void	ft_add_compiles(t_coder	*coder)
+static void	ft_work_loop(t_coder	*coder, t_context	*ctx)
 {
-	pthread_mutex_lock(&coder->mutex);
-	coder->compiles++;
-	pthread_mutex_unlock(&coder->mutex);
+	ft_log(coder, "has taken a dongle");
+	ft_log(coder, "has taken a dongle");
+	ft_log(coder, "is compiling");
+	usleep(ctx->args.time_to_compile * 1000);
+	ft_add_compiles(coder);
+	ft_release_dongles(coder);
+	if (!ft_get_running(ctx))
+		return ;
+	ft_log(coder, "is debugging");
+	usleep(ctx->args.time_to_debug * 1000);
+	if (!ft_get_running(ctx))
+		return ;
+	ft_log(coder, "is refactoring");
+	usleep(ctx->args.time_to_refactor * 1000);
 }
 
 void	*ft_live_life(void	*args)
@@ -129,38 +88,7 @@ void	*ft_live_life(void	*args)
 		ft_get_in_q(coder);
 		if (!ft_wait_for_permission(coder))
 			break ;
-		ft_log(coder, "has taken a dongle");
-		ft_log(coder, "has taken a dongle");
-		ft_log(coder, "is compiling");
-		usleep(ctx->args.time_to_compile * 1000);
-		ft_add_compiles(coder);
-		ft_release_dongles(coder);
-		if (!ft_get_running(ctx))
-			break ;
-		ft_log(coder, "is debugging");
-		usleep(ctx->args.time_to_debug * 1000);
-		if (!ft_get_running(ctx))
-			break ;
-		ft_log(coder, "is refactoring");
-		usleep(ctx->args.time_to_refactor * 1000);
+		ft_work_loop(coder, ctx);
 	}
 	return (NULL);
-}
-
-void	ft_wake_up(t_coder	*coder)
-{
-	pthread_mutex_lock(&coder->mutex);
-	coder->can_work = true;
-	pthread_cond_broadcast(&coder->cond);
-	pthread_mutex_unlock(&coder->mutex);
-}
-
-unsigned int	ft_get_compiles(t_coder	*coder)
-{
-	unsigned int	res;
-
-	pthread_mutex_lock(&coder->mutex);
-	res = coder->compiles;
-	pthread_mutex_unlock(&coder->mutex);
-	return (res);
 }
