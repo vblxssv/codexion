@@ -6,7 +6,7 @@
 /*   By: vborysov <vborysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 14:57:20 by vborysov          #+#    #+#             */
-/*   Updated: 2026/05/11 21:35:32 by vborysov         ###   ########.fr       */
+/*   Updated: 2026/05/13 19:20:27 by vborysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@ static void	ft_shift_down(t_queue *q, unsigned int i)
 		if (left < q->size
 			&& ft_is_higher(q->heap[left], q->heap[best], q->mode))
 			best = left;
-		if (right < q->size && ft_is_higher(q->heap[right], q->heap[best], q->mode))
+		if (right < q->size
+			&& ft_is_higher(q->heap[right], q->heap[best], q->mode))
 			best = right;
 		if (best != i)
 		{

@@ -6,7 +6,7 @@
 /*   By: vborysov <vborysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/09 16:40:15 by vborysov          #+#    #+#             */
-/*   Updated: 2026/05/11 22:18:49 by vborysov         ###   ########.fr       */
+/*   Updated: 2026/05/15 13:16:11 by vborysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ t_coder	*ft_init_coders(t_context	*ctx)
 	{
 		coders[i].id = i + 1;
 		coders[i].compiles = 0;
-		coders[i].deadline = 0;
 		coders[i].state = IDLE;
 		coders[i].can_work = false;
 		coders[i].ctx = ctx;
@@ -80,9 +79,9 @@ void	ft_get_in_q(t_coder	*coder)
 static bool	ft_wait_for_permission(t_coder *coder)
 {
 	pthread_mutex_lock(&coder->mutex);
-	while (!coder->can_work && coder->ctx->is_running)
+	while (!coder->can_work && ft_get_running(coder->ctx))
 		pthread_cond_wait(&coder->cond, &coder->mutex);
-	if (!coder->ctx->is_running)
+	if (!ft_get_running(coder->ctx))
 	{
 		pthread_mutex_unlock(&coder->mutex);
 		return (false);
@@ -107,6 +106,13 @@ static void	ft_release_dongles(t_coder	*coder)
 	ft_unlock_pair(coder->left, coder->right);
 }
 
+static void	ft_add_compiles(t_coder	*coder)
+{
+	pthread_mutex_lock(&coder->mutex);
+	coder->compiles++;
+	pthread_mutex_unlock(&coder->mutex);
+}
+
 void	*ft_live_life(void	*args)
 {
 	t_coder		*coder;
@@ -114,31 +120,30 @@ void	*ft_live_life(void	*args)
 
 	coder = (t_coder *)args;
 	ctx = coder->ctx;
-	while (!ctx->is_running)
+	while (!ft_get_running(ctx))
 		usleep(100);
 	if (coder->id % 2 == 0)
 		usleep(ctx->args.time_to_compile * 500);
-	while (ctx->is_running)
-    {
-        ft_get_in_q(coder);
-        if (!ft_wait_for_permission(coder))
-            break ;
-        ft_log(coder, "has taken a dongle");
-        ft_log(coder, "has taken a dongle");
-        ft_log(coder, "is compiling");
-        usleep(ctx->args.time_to_compile * 1000);
-        ft_release_dongles(coder);
-        
-        if (!ctx->is_running) break ;
-
-        ft_log(coder, "is debugging");
-        usleep(ctx->args.time_to_debug * 1000);
-        
-        if (!ctx->is_running) break ;
-
-        ft_log(coder, "is refactoring");
-        usleep(ctx->args.time_to_refactor * 1000);
-    }
+	while (ft_get_running(ctx))
+	{
+		ft_get_in_q(coder);
+		if (!ft_wait_for_permission(coder))
+			break ;
+		ft_log(coder, "has taken a dongle");
+		ft_log(coder, "has taken a dongle");
+		ft_log(coder, "is compiling");
+		usleep(ctx->args.time_to_compile * 1000);
+		ft_add_compiles(coder);
+		ft_release_dongles(coder);
+		if (!ft_get_running(ctx))
+			break ;
+		ft_log(coder, "is debugging");
+		usleep(ctx->args.time_to_debug * 1000);
+		if (!ft_get_running(ctx))
+			break ;
+		ft_log(coder, "is refactoring");
+		usleep(ctx->args.time_to_refactor * 1000);
+	}
 	return (NULL);
 }
 
@@ -148,4 +153,14 @@ void	ft_wake_up(t_coder	*coder)
 	coder->can_work = true;
 	pthread_cond_broadcast(&coder->cond);
 	pthread_mutex_unlock(&coder->mutex);
+}
+
+unsigned int	ft_get_compiles(t_coder	*coder)
+{
+	unsigned int	res;
+
+	pthread_mutex_lock(&coder->mutex);
+	res = coder->compiles;
+	pthread_mutex_unlock(&coder->mutex);
+	return (res);
 }

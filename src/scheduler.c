@@ -6,7 +6,7 @@
 /*   By: vborysov <vborysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/09 20:43:31 by vborysov          #+#    #+#             */
-/*   Updated: 2026/05/11 21:27:28 by vborysov         ###   ########.fr       */
+/*   Updated: 2026/05/14 18:44:07 by vborysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	*ft_scheduler_routine(void	*args)
 	t_coder		*coder;
 
 	ctx = (t_context *)args;
-	while (ctx->is_running)
+	while (ft_get_running(ctx))
 	{
 		i = 0;
 		while (i < ctx->args.number_of_coders)
