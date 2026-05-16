@@ -13,14 +13,14 @@ OBJ = $(SRC:src/%.c=$(OBJ_DIR)/%.o)
 
 CFLAGS += -I $(INC_DIR)
 
-CODERS    ?= 3
+CODERS    ?= 4
 BURNOUT   ?= 1000
 COMPILE   ?= 200
 DEBUG     ?= 100
 REFACTOR  ?= 100
-DONGLE    ?= 100
-COMPILES  ?= 5
-SCHEDULER ?= fifo
+DONGLE    ?= 200
+COMPILES  ?= 3
+SCHEDULER ?= edf
 
 all: $(NAME)
 
