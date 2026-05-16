@@ -2,14 +2,17 @@ NAME = codexion
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -pthread
 
-OBJ_DIR = obj
-INC_DIR = inc
+OBJ_DIR = coders/obj
+INC_DIR = coders/inc
+SRC_DIR = coders/src
 
-SRC = src/main.c src/parse.c src/context.c src/time_utils.c src/dongle.c \
- src/p_queue.c src/p_queue_utils.c src/coder_routine.c src/coder_init.c src/coder_utils.c \
- src/scheduler.c src/logger.c src/monitor.c src/context_init.c src/dongle_init.c
+SRC = main.c parse.c context.c time_utils.c dongle.c \
+      p_queue.c p_queue_utils.c coder_routine.c coder_init.c coder_utils.c \
+      scheduler.c logger.c monitor.c context_init.c dongle_init.c
 
-OBJ = $(SRC:src/%.c=$(OBJ_DIR)/%.o)
+SRC_FILES = $(addprefix $(SRC_DIR)/, $(SRC))
+
+OBJ = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 CFLAGS += -I $(INC_DIR)
 
@@ -27,15 +30,17 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
-$(OBJ_DIR)/%.o: src/%.c
-	@mkdir -p $(dir $@)
+$(OBJ_DIR)/%.o: coders/src/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
 
 clean:
 	rm -rf $(OBJ_DIR)
 
 fclean: clean
-	rm -f $(NAME)
+	rm -rf $(NAME)
 
 re: fclean all
 
@@ -44,7 +49,7 @@ normi:
 
 run: $(NAME)
 	./$(NAME) --coders $(CODERS) --burnout $(BURNOUT) --compile $(COMPILE) \
-               --debug $(DEBUG) --refactor $(REFACTOR) --dongle $(DONGLE) \
-               --compiles $(COMPILES) --scheduler $(SCHEDULER)
+	          --debug $(DEBUG) --refactor $(REFACTOR) --dongle $(DONGLE) \
+	          --compiles $(COMPILES) --scheduler $(SCHEDULER)
 
-.PHONY: all clean fclean re run
+.PHONY: all clean fclean re run normi
