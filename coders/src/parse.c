@@ -6,7 +6,7 @@
 /*   By: vborysov <vborysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 21:31:29 by vborysov          #+#    #+#             */
-/*   Updated: 2026/05/09 16:56:46 by vborysov         ###   ########.fr       */
+/*   Updated: 2026/05/17 00:15:51 by vborysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ bool	ft_parse_args(int argc, char	**argv, t_args	*args)
 			return (false);
 		i += 2;
 	}
-	if (args->number_of_coders == -1 || args->time_to_burnout == -1
+	if (args->number_of_coders < 1 || args->time_to_burnout == -1
 		|| args->time_to_compile == -1 || args->time_to_debug == -1
 		|| args->time_to_refactor == -1
 		|| args->number_of_compiles_required == -1

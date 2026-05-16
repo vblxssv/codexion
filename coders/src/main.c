@@ -6,7 +6,7 @@
 /*   By: vborysov <vborysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 18:45:17 by vborysov          #+#    #+#             */
-/*   Updated: 2026/05/15 16:41:45 by vborysov         ###   ########.fr       */
+/*   Updated: 2026/05/17 00:35:54 by vborysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	main(int argc, char	**argv)
 
 	if (!ft_init_context(&context, argc, argv))
 	{
-		printf("ERROR: Initialization context\n");
+		fprintf(stderr, "ERROR: Initialization context\n");
 		return (1);
 	}
 	ft_run_simulation(&context);

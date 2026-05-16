@@ -3,3 +3,4 @@ coders/obj/
 coders/obj/*.o
 .DS_Store
 sim.log
+.vscode/

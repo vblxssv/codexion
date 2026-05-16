@@ -6,7 +6,7 @@
 /*   By: vborysov <vborysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/09 20:43:31 by vborysov          #+#    #+#             */
-/*   Updated: 2026/05/15 15:38:59 by vborysov         ###   ########.fr       */
+/*   Updated: 2026/05/17 00:24:42 by vborysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ static bool	ft_is_ready(t_coder	*coder)
 	t_request	left_req;
 	t_request	right_req;
 
+	if (coder->left == coder->right)
+		return (false);
 	now = ft_get_relative_time(coder->ctx->start_time);
 	left_req = ft_peek(coder->left->queue);
 	right_req = ft_peek(coder->right->queue);
